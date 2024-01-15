@@ -2,6 +2,8 @@ const http = require("http");
 const fs = require("fs/promises");
 const PORT = 5555;
 
+// put these in a json file
+
 const cats = [
   {
     imageUrl:
