@@ -1,4 +1,4 @@
-const homeHandler = require('../handlers/home');
+const homeHandler = require('../handlers/home.js');
 const staticHandler = require('../handlers/static-files');
 
 const handlers = {};
