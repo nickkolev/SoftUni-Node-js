@@ -60,6 +60,7 @@ const addCatHandler = {
 }
 module.exports = addCatHandler;
 
+// random id generator
 function setId(num) {
     let id = ('00000000' + (Math.random() * 99999999 * num | 0).toString(16)).slice(-8);
 
