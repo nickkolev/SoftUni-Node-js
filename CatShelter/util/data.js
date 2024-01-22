@@ -11,4 +11,6 @@ async function getCats(req) {
     }
 }
 
+// coment
+let car = 1;
 module.exports=getCats;
