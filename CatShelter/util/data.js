@@ -11,6 +11,4 @@ async function getCats(req) {
     }
 }
 
-
-
 module.exports=getCats;
