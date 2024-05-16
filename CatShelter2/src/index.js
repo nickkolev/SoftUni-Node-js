@@ -1,15 +1,19 @@
 const http = require('http');
+const port = 3000;
 const { homeHandler } = require('./handlers/home');
+const { stylesHandler } = require('./handlers/styles');
 
 const routes = {
     '/': homeHandler,
-    '/index.html': homeHandler
+    '/home': homeHandler,
 };
 
 http.createServer((req, res) => {
     const route = routes[req.url];
     if (typeof route === 'function') {
-        homeHandler(req, res);
+        route(req, res);
+    } else if (req.url.endsWith('.css')) {
+        stylesHandler(req, res);
     } else {
         res.writeHead(404, {
             'Content-Type': 'text/plain'
@@ -17,4 +21,4 @@ http.createServer((req, res) => {
         res.write('404 Not Found');
         res.end();
     }
-}).listen(3000);
+}).listen(port);

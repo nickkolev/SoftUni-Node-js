@@ -1,4 +1,5 @@
 const { readFile } = require("../util");
+const cats = require("../../data/cats.json");
 
 function homeHandler(req, res) {
     const html = readFile('./views/home/index.html');
