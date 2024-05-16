@@ -2,10 +2,13 @@ const http = require('http');
 const port = 3000;
 const { homeHandler } = require('./handlers/home');
 const { stylesHandler } = require('./handlers/styles');
+const { catsHandler } = require('./handlers/cat');
 
 const routes = {
     '/': homeHandler,
     '/home': homeHandler,
+    '/cats/add-cat': catsHandler,
+    '/cats/add-breed': catsHandler,
 };
 
 http.createServer((req, res) => {
