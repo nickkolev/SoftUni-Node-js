@@ -143,6 +143,156 @@ module.exports = (req, res) => {
                 });
             });
         });
+    } else if (pathname.includes('/cats-edit') && req.method === 'GET') {
+        let filePath = path.normalize(
+            path.join(__dirname, '../views/editCat.html')
+        );
+
+        const index = fs.createReadStream(filePath);
+
+        index.on('data', (data) => {
+            let catId = pathname.split('/').pop();
+            let cat = cats.find(cat => cat.id == catId);
+            let catBreedPlaceholder = breeds.map(breed => `<option value="${breed}">${breed}</option>`);
+            let modifiedData = data.toString().replace('{{catId}}', cat.id)
+                .replace('{{catName}}', cat.name)
+                .replace('{{catDescription}}', cat.description)
+                .replace('{{catBreed}}', catBreedPlaceholder)
+                .replace('{{catImage}}', cat.image);
+            res.write(modifiedData);
+        });
+
+        index.on('end', () => {
+            res.end();
+        });
+
+        index.on('error', (err) => {
+            console.log(err);
+        });
+    } else if (pathname.includes('/cats-edit') && req.method === 'POST') {
+        const form = new formidable.IncomingForm();
+
+        form.parse(req, (err, fields, files) => {
+            if (err) {
+                console.error('Form parse error:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('An error occurred while processing the form.');
+                return;
+            }
+
+            console.log('Fields:', fields);
+            console.log('Files:', files);
+
+            let catId = pathname.split('/').pop();
+            let cat = cats.find(cat => cat.id == catId);
+
+            if (!files.upload) {
+                console.error('No file was uploaded');
+                res.writeHead(400, { 'Content-Type': 'text/plain' });
+                res.end('No file was uploaded.');
+                return;
+            }
+
+            const uploadedFile = files.upload[0];
+
+            const oldPath = uploadedFile.filepath;
+            const newPath = path.normalize(path.join(__dirname, '../content/images/' + uploadedFile.newFilename));
+
+            fs.copy(oldPath, newPath, (err) => {
+                if (err) {
+                    console.error('File copy error:', err);
+                    res.writeHead(500, { 'Content-Type': 'text/plain' });
+                    res.end('An error occurred while saving the file.');
+                    return;
+                }
+
+                console.log('File was uploaded successfully!');
+
+                fs.readFile('./data/cats.json', 'utf-8', (err, data) => {
+                    if (err) {
+                        console.error('File read error:', err);
+                        res.writeHead(500, { 'Content-Type': 'text/plain' });
+                        res.end('An error occurred while reading the data.');
+                        return;
+                    }
+
+                    const allCats = JSON.parse(data);
+                    allCats.push({ id: allCats.length + 1, ...fields, image: files.upload.name });
+
+                    const json = JSON.stringify(allCats);
+
+                    fs.writeFile('./data/cats.json', json, (err) => {
+                        if (err) {
+                            console.error('File write error:', err);
+                            res.writeHead(500, { 'Content-Type': 'text/plain' });
+                            res.end('An error occurred while saving the data.');
+                            return;
+                        }
+
+                        console.log('The cat was uploaded successfully!');
+
+                        res.writeHead(301, { location: '/' });
+                        res.end();
+                    });
+                });
+            });
+        });
+    } else if (pathname.includes('/cats-find-new-home') && req.method === 'GET') {
+        let filePath = path.normalize(
+            path.join(__dirname, '../views/catShelter.html')
+        );
+
+        const index = fs.createReadStream(filePath);
+
+        index.on('data', (data) => {
+            let catId = pathname.split('/').pop();
+            let cat = cats.find(cat => cat.id == catId);
+            let modifiedData = data.toString().replace('{{catId}}', catId)
+                .replace('{{catName}}', cat.name)
+                .replace('{{catDescription}}', cat.description)
+                .replace('{{catBreed}}', cat.breed)
+                .replace('{{catImage}}', cat.image);
+            res.write(modifiedData);
+        });
+
+        index.on('end', () => {
+            res.end();
+        });
+
+        index.on('error', (err) => {
+            console.log(err);
+        });
+    } else if (pathname.includes('/cats-find-new-home') && req.method === 'POST') {
+        let catId = pathname.split('/').pop();
+        let cat = cats.find(cat => cat.id == catId);
+
+        fs.readFile('./data/cats.json', 'utf-8', (err, data) => {
+            if (err) {
+                console.error('File read error:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('An error occurred while reading the data.');
+                return;
+            }
+
+            const allCats = JSON.parse(data);
+            allCats.splice(allCats.indexOf(cat), 1);
+
+            const json = JSON.stringify(allCats);
+
+            fs.writeFile('./data/cats.json', json, (err) => {
+                if (err) {
+                    console.error('File write error:', err);
+                    res.writeHead(500, { 'Content-Type': 'text/plain' });
+                    res.end('An error occurred while saving the data.');
+                    return;
+                }
+
+                console.log('The cat was deleted successfully!');
+
+                res.writeHead(301, { location: '/' });
+                res.end();
+            });
+        });
     } else {
         return true;
     }
