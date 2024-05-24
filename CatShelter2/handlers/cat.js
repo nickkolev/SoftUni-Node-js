@@ -1,8 +1,8 @@
 const url = require('url');
-const fs = require('fs');
+const formidable = require('formidable');
+const fs = require('fs-extra');
 const path = require('path');
 const qs = require('querystring');
-const formidable = require('formidable');
 const cats = require('../data/cats.json');
 const breeds = require('../data/breeds.json');
 
@@ -15,9 +15,11 @@ module.exports = (req, res) => {
         );
 
         const index = fs.createReadStream(filePath);
-
+        
         index.on('data', (data) => {
-            res.write(data);
+            let catBreedPlaceholder = breeds.map(breed => `<option value="${breed}">${breed}</option>`);
+            let modifiedData = data.toString().replace('{{catBreeds}}', catBreedPlaceholder);
+            res.write(modifiedData);
         });
 
         index.on('end', () => {
@@ -77,43 +79,70 @@ module.exports = (req, res) => {
 
         res.end();
     } else if (pathname === '/cats/add-cat' && req.method === 'POST') {
-        let form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm();
 
         form.parse(req, (err, fields, files) => {
             if (err) {
-                throw err;
+                console.error('Form parse error:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('An error occurred while processing the form.');
+                return;
             }
 
-            let oldPath = files.upload.path;
-            let newPath = path.normalize(path.join(__dirname, '../content/images/' + files.upload.name));
+            console.log('Fields:', fields);
+            console.log('Files:', files);
 
-            fs.rename(oldPath, newPath, (err) => {
+            if (!files.upload) {
+                console.error('No file was uploaded');
+                res.writeHead(400, { 'Content-Type': 'text/plain' });
+                res.end('No file was uploaded.');
+                return;
+            }
+
+            const uploadedFile = files.upload[0];
+
+            const oldPath = uploadedFile.filepath;
+            const newPath = path.normalize(path.join(__dirname, '../content/images/' + uploadedFile.newFilename));
+
+            fs.copy(oldPath, newPath, (err) => {
                 if (err) {
-                    throw err;
+                    console.error('File copy error:', err);
+                    res.writeHead(500, { 'Content-Type': 'text/plain' });
+                    res.end('An error occurred while saving the file.');
+                    return;
                 }
 
-                console.log('Files was uploaded successfully!');
-            });
+                console.log('File was uploaded successfully!');
 
-            fs.readFile('./data/cats.json', 'utf-8', (err, data) => {
-                if(err) {
-                    throw err;
-                }
+                fs.readFile('./data/cats.json', 'utf-8', (err, data) => {
+                    if (err) {
+                        console.error('File read error:', err);
+                        res.writeHead(500, { 'Content-Type': 'text/plain' });
+                        res.end('An error occurred while reading the data.');
+                        return;
+                    }
 
-                let allCats = JSON.parse(data);
-                allCats.push({ id: cats.length + 1, ...fields, image: files.upload.name });
+                    const allCats = JSON.parse(data);
+                    allCats.push({ id: allCats.length + 1, ...fields, image: files.upload.name });
 
-                let json = JSON.stringify(allCats);
+                    const json = JSON.stringify(allCats);
 
-                fs.writeFile('./data/cats.json', json, () => console.log('The cat was uploaded successfully!'));
+                    fs.writeFile('./data/cats.json', json, (err) => {
+                        if (err) {
+                            console.error('File write error:', err);
+                            res.writeHead(500, { 'Content-Type': 'text/plain' });
+                            res.end('An error occurred while saving the data.');
+                            return;
+                        }
+
+                        console.log('The cat was uploaded successfully!');
+
+                        res.writeHead(301, { location: '/' });
+                        res.end();
+                    });
+                });
             });
         });
-
-        res.writeHead(301, {
-            location: '/'
-        });
-
-        res.end();
     } else {
         return true;
     }
