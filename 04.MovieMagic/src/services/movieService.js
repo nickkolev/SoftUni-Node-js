@@ -3,7 +3,7 @@ const movies = [{
     genre: "Action, Adventure, Sci-Fi",
     director: "Christopher Nolan",
     year: 2010,
-    imageUrl: "https://www.imdb.com/title/tt1375666/mediaviewer/rm10105600",
+    imageUrl: "/img/the-little-mermaid.jpg",
     rating: 8.8,
     description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
     _id: 1
@@ -12,7 +12,7 @@ const movies = [{
     genre: "Action, Sci-Fi",
     director: "Lana Wachowski, Lilly Wachowski",
     year: 1999,
-    imageUrl: "https://www.imdb.com/title/tt0133093/mediaviewer/rm1465880832",
+    imageUrl: "/img/home-alone.jpeg",
     rating: 8.7,
     description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
     _id: 2
@@ -21,7 +21,7 @@ const movies = [{
     genre: "Action, Sci-Fi",
     director: "Lana Wachowski, Lilly Wachowski",
     year: 2003,
-    imageUrl: "https://www.imdb.com/title/tt0234215/mediaviewer/rm4246718720",
+    imageUrl: "/img/jungle-cruise.jpeg",
     rating: 7.2,
     description: "Neo and his allies fight against the machines in a post-apocalyptic world.",
     _id: 3 
@@ -36,8 +36,30 @@ exports.create = (movieData) => {
     movies.push(movieData);
 };
 
+exports.search = (title, genre, year) => {
+    let result = movies.slice();
+
+    if(title) {
+        result = result.filter(m => m.title.toLowerCase().includes(title.toLowerCase()));
+    }
+
+    if(genre) {
+        result = result.filter(m => m.genre.toLowerCase().includes(genre.toLowerCase()));
+    }
+
+    if(year) {
+        result = result.filter(m => m.year == year);
+    }
+
+    return result;
+}
+
 exports.getOne = (movieId) => {
     const movie = movies.find(m => m._id == movieId);
+
+    if(!movie) {
+        return -1;
+    }
 
     return movie;
 }

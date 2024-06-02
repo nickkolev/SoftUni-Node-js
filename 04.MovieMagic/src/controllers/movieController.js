@@ -18,6 +18,11 @@ router.get('/details/:movieId', (req, res) => {
     const movieId = req.params.movieId;
     const movie = movieService.getOne(movieId);
 
+    if(movie == -1) {
+        res.redirect('/404');
+        return;
+    }
+
     res.render('details', {movie});
 });
 
