@@ -19,6 +19,8 @@ router.get("/search", (req, res) => {
 
     res.render("search", {movies});
 
+
+    // asdasd
     // asd
 })
 
