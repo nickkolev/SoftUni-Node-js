@@ -18,6 +18,8 @@ router.get("/search", (req, res) => {
     const movies = movieService.search(title, genre, year);
 
     res.render("search", {movies});
+
+    // asd
 })
 
 router.get("/404", (req, res) => {
