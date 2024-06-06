@@ -24,6 +24,8 @@ router.get('/details/:movieId', async (req, res) => {
     const movieId = req.params.movieId;
     const movie = await movieService.getOne(movieId).lean();
 
+    console.log(movie);
+
     if(movie == -1) {
         res.redirect('/404');
         return;
