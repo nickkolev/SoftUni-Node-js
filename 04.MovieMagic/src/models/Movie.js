@@ -35,10 +35,13 @@ const movieSchema = new mongoose.Schema({
         required: true,
         match: [/^https?:\/\//, 'Invalid URL!'],
     },
-    // cast: {
-    //     type: [String],
-    //     default: []
-    // }
+    casts: {
+        type: [{
+            type: mongoose.Types.ObjectId,
+            ref: "Cast",
+        }],
+        default: []
+    },
 });
 
 const Model = mongoose.model("Movie", movieSchema);
