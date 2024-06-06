@@ -6,17 +6,23 @@ router.get('/create', (req, res) => {
     res.render('create');
 });
 
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
     const newMovie = req.body;
 
-    movieService.create(newMovie);
+    try {
+        await movieService.create(newMovie);
+        
+        res.redirect('/');
+    } catch(err) {
+        console.log(err.message);
+        res.redirect('/create');
+    }
 
-    res.redirect('/');
 });
 
-router.get('/details/:movieId', (req, res) => {
+router.get('/details/:movieId', async (req, res) => {
     const movieId = req.params.movieId;
-    const movie = movieService.getOne(movieId);
+    const movie = await movieService.getOne(movieId).lean();
 
     if(movie == -1) {
         res.redirect('/404');

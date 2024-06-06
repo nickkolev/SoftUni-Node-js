@@ -23,7 +23,7 @@ const movieSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: 1,
-        max: 5,
+        max: 10,
     },
     description: {
         type: String,
@@ -33,7 +33,7 @@ const movieSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
         required: true,
-        match: [/^https?/, 'Invalid URL!'],
+        match: [/^https?:\/\//, 'Invalid URL!'],
     },
     // cast: {
     //     type: [String],

@@ -1,43 +1,16 @@
-const movies = [{
-    title: "Inception",
-    genre: "Action, Adventure, Sci-Fi",
-    director: "Christopher Nolan",
-    year: 2010,
-    imageUrl: "/img/the-little-mermaid.jpg",
-    rating: 8.8,
-    description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-    _id: 1
-}, {
-    title: "The Matrix",
-    genre: "Action, Sci-Fi",
-    director: "Lana Wachowski, Lilly Wachowski",
-    year: 1999,
-    imageUrl: "/img/home-alone.jpeg",
-    rating: 8.7,
-    description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
-    _id: 2
-}, {
-    title: "The Matrix Reloaded",
-    genre: "Action, Sci-Fi",
-    director: "Lana Wachowski, Lilly Wachowski",
-    year: 2003,
-    imageUrl: "/img/jungle-cruise.jpeg",
-    rating: 7.2,
-    description: "Neo and his allies fight against the machines in a post-apocalyptic world.",
-    _id: 3 
-}];
+const Movie = require("../models/Movie");
 
 exports.getAll = () => {
-    return movies.slice();
+    const movies = Movie.find();
+
+    return movies;
 };
 
-exports.create = (movieData) => {
-    movieData._id = movies[movies.length - 1]._od + 1;
-    movies.push(movieData);
-};
+exports.create = (movieData) => Movie.create(movieData);
 
-exports.search = (title, genre, year) => {
-    let result = movies.slice();
+// TODO: filter result in MongoDB 
+exports.search = async (title, genre, year) => {
+    let result = await Movie.find().lean(); 
 
     if(title) {
         result = result.filter(m => m.title.toLowerCase().includes(title.toLowerCase()));
@@ -55,7 +28,7 @@ exports.search = (title, genre, year) => {
 }
 
 exports.getOne = (movieId) => {
-    const movie = movies.find(m => m._id == movieId);
+    const movie = Movie.findById(movieId);
 
     if(!movie) {
         return -1;
