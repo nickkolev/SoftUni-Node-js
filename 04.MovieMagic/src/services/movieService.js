@@ -39,10 +39,6 @@ exports.getOne = (movieId) => {
 
 exports.attach = async (movieId, castId) => {
     const movie = await this.getOne(movieId);
-    
-    //aaaaasd
-    // asd asd
-    //asd asd 
 
     //TODO: validate castId if exists
     //TODO: validate if cast is already added
