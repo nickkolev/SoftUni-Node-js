@@ -22,17 +22,12 @@ userSchema.pre("save", async function () {
     this.password = hash;
 });
 
-// userSchema.virtual("rePassword")
-//     .set(function (value) {
-//         this._rePassword = value;
-//     })
-//     .get(function () {
-//         return this._rePassword;
-//     });
-
-// userSchema.path("rePassword").validate(function () {
-//     return this.password === this._rePassword;
-// }, "Passwords don't match");
+userSchema.virtual("rePassword")
+    .set(function (value) {
+        if (this.password !== value) {
+            throw new Error("Passwords don't match");
+        }
+    });
 
 const User = mongoose.model("User", userSchema);
 
