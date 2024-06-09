@@ -1,3 +1,4 @@
+const util = require("util");
 const jwt = require("jsonwebtoken");
 
 function sign(payload, secretOrPrivateKey, options = {}) {
@@ -13,6 +14,11 @@ function sign(payload, secretOrPrivateKey, options = {}) {
     return promise;
 }
 
+// util.promisify взима функцията която му подаваме и ще я превърне в promise версията и
+// от callback ф-я я превръща в promise ф-я
+const verify = util.promisify(jwt.verify);
+
 module.exports = {
     sign,
+    verify,
 };

@@ -22,10 +22,13 @@
 
                 <p class="disc">Description: {{description}}</p>
             </div>
+
+            {{#if isOwner}}
             <div class="details-btn">
                 <a href="/movies/{{_id}}/edit" id="edit-button">Edit</a>
                 <a href="#" id="delete-button">Delete</a>
             </div>
+            {{/if}}
             {{/with}}
         </div>
         <div class="card_right">

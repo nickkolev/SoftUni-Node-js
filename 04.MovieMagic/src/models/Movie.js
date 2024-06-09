@@ -42,6 +42,10 @@ const movieSchema = new mongoose.Schema({
         }],
         default: []
     },
+    owner: {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+    },
 });
 
 const Model = mongoose.model("Movie", movieSchema);
