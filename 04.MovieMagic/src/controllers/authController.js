@@ -23,16 +23,6 @@ router.post('/login', async (req, res) => {
 
     const token = await userService.login(email, password);
 
-
-
-
-
-
-
-
-    
-
-
     res.cookie('auth', token);
 
     res.redirect('/');
