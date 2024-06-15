@@ -1,6 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
-const { breedsTemplate } = require('../util/template');
+const { breedsTemplate } = require('../util/template.js');
 const getCats = require('../util/data.js')
 
 

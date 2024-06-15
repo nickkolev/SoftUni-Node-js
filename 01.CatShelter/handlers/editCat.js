@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
 const formidable = require('formidable');
-const { breedsTemplate } = require('../util/template');
+const { breedsTemplate } = require('../util/template.js');
 const getCats = require('../util/data.js')
 
 async function get(req, res) {
