@@ -25,7 +25,7 @@ const courseSchema = new mongoose.Schema({
         },
     },
     description: {
-        type: Boolean,
+        type: String,
         required: [true, 'Description is required!'],
     },
     price: {
