@@ -18,14 +18,6 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password is required!'],
         minlength: 8,
     },
-    createdCourses: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Course',
-    }],
-    enrolledCourses: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Course',
-    }],
 });
 
 userSchema.pre("save", async function () {
