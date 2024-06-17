@@ -39,12 +39,8 @@ exports.deleteOne = async (courseId) => {
     res.redirect('/courses');
 };
 
-async function isOwner(req, res, next) {
-    const course = await courseService.getOne(req.params.courseId);
+exports.edit = async (courseId, courseData) => {
+    await Course.findByIdAndUpdate(courseId, courseData, {runValidators: true});
+};
 
-    if (course.owner != req.user?._id) {
-        return res.redirect(`/courses/${req.params.courseId}/details`);
-    }
-
-    next();
-}
+exports.getLatest = (count) => Course.find().sort({createdAt: -1}).limit(count);

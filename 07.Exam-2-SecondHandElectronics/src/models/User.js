@@ -5,25 +5,24 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Username is required!'],
-        minlength: 2,
+        unique: true,
     },
     email: {
         type: String,
         required: [true, 'Email is required!'],
         unique: true,
-        minLength: 10,
         lowercase: true,
     },
     password: {
         type: String,
-        minLength: 4,
         required: [true, 'Password is required!'],
+        minlength: 8,
     },
     createdCourses: [{
         type: mongoose.Types.ObjectId,
         ref: 'Course',
     }],
-    signUpCourses: [{
+    enrolledCourses: [{
         type: mongoose.Types.ObjectId,
         ref: 'Course',
     }],
