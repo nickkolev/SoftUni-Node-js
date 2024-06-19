@@ -43,4 +43,19 @@ exports.edit = async (electronicsId, electronicsData) => {
     await Electronics.findByIdAndUpdate(electronicsId, electronicsData, {runValidators: true});
 };
 
+exports.search = (name, type) => {
+    let query = Electronics.find(); 
+
+    if(name) {
+        query = query.find({ name: { $regex: new RegExp(name, 'i') } });
+    }
+
+    if(type) {
+        query = query.find({ type: { $regex: new RegExp(type, 'i') } });
+    }
+
+    return query;
+}
+
+
 // exports.getLatest = (count) => Course.find().sort({createdAt: -1}).limit(count);
