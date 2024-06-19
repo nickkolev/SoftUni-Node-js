@@ -18,13 +18,13 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password is required!'],
         minlength: 8,
     },
-    createdCourses: [{
+    createdElectronics: [{
         type: mongoose.Types.ObjectId,
-        ref: 'Course',
+        ref: 'Electronics',
     }],
-    enrolledCourses: [{
+    boughtElectronic: [{
         type: mongoose.Types.ObjectId,
-        ref: 'Course',
+        ref: 'Electronics',
     }],
 });
 

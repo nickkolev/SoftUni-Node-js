@@ -14,7 +14,7 @@ configHandlebars(app);
 app.use(routes);
 
 // TODO: change database name
-mongoose.connect("mongodb://localhost:27017/course-book")
+mongoose.connect("mongodb://localhost:27017/second-hand-electronics")
     .then(() => {
         console.log('DB connected!');
         app.listen(port, () => { 
