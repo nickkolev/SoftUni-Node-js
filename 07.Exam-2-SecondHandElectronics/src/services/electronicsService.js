@@ -16,31 +16,31 @@ exports.getAll = () => Electronics.find();
 
 exports.getOne = (electronicsId) => Electronics.findById(electronicsId);
 
-// exports.getOneDetailed = (electronicsId) => this.getOne(electronicsId).populate('owner').populate('signUpList');
+exports.getOneDetailed = (electronicsId) => this.getOne(electronicsId).populate('owner'); //.populate('buyingList')
 
-// exports.signUp = async (courseId, userId) => {
-//     // await Course.findByIdAndUpdate(courseId, {$push: {signUpList: userId}});
-//     // await User.findByIdAndUpdate(userId, {$push: {signUpCourses: courseId}});
+exports.buy = async (electronicsId, userId) => {
+    // await Course.findByIdAndUpdate(courseId, {$push: {signUpList: userId}});
+    // await User.findByIdAndUpdate(userId, {$push: {signUpCourses: courseId}});
 
-//     const course = await Course.findById(courseId);
-//     const user = await User.findById(userId);
+    const electronics = await Electronics.findById(electronicsId);
+    const user = await User.findById(userId);
 
-//     course.signUpList.push(userId);
-//     user.signUpCourses.push(courseId);
+    electronics.buyingList.push(userId);
+    user.boughtElectronic.push(electronicsId);
 
-//     await course.save();
-//     await user.save();
-// };
+    await electronics.save();
+    await user.save();
+};
 
-// exports.deleteOne = async (courseId) => {
+exports.deleteOne = async (electronicsId) => {
 
-//     const course = await Course.findByIdAndDelete(courseId);
+    const electronics = await Electronics.findByIdAndDelete(electronicsId);
 
-//     res.redirect('/courses');
-// };
+    return electronics;
+};
 
-// exports.edit = async (courseId, courseData) => {
-//     await Course.findByIdAndUpdate(courseId, courseData, {runValidators: true});
-// };
+exports.edit = async (electronicsId, electronicsData) => {
+    await Electronics.findByIdAndUpdate(electronicsId, electronicsData, {runValidators: true});
+};
 
 // exports.getLatest = (count) => Course.find().sort({createdAt: -1}).limit(count);
