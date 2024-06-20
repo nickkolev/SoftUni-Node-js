@@ -33,6 +33,7 @@ const volcanoSchema = new mongoose.Schema({
     voteList: [{
         type: mongoose.Types.ObjectId,
         ref: 'User',
+        default: [],
     }],
     owner: {
         type: mongoose.Types.ObjectId,

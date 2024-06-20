@@ -16,14 +16,14 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password is required!'],
         minlength: 8,
     },
-    // createdCourses: [{
-    //     type: mongoose.Types.ObjectId,
-    //     ref: 'Course',
-    // }],
-    // enrolledCourses: [{
-    //     type: mongoose.Types.ObjectId,
-    //     ref: 'Course',
-    // }],
+    createdVolcanos: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Volcano',
+    }],
+    votedVolcanos: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Volcano',
+    }],
 });
 
 userSchema.pre("save", async function () {

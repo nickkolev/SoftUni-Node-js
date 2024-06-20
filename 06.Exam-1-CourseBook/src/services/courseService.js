@@ -36,7 +36,7 @@ exports.deleteOne = async (courseId) => {
 
     const course = await Course.findByIdAndDelete(courseId);
 
-    res.redirect('/courses');
+    return course;
 };
 
 exports.edit = async (courseId, courseData) => {
