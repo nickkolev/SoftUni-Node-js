@@ -10,47 +10,40 @@
 </head>
 
 <body>
-
-    <!-- In case of error, you should display div with class "errorContainer" -->
-    <!-- You can choose to display the first error or all of them (error message/s in your opinion) -->
-
-    {{#if error}}
-    <div>
-        <div class="errorContainer">
-            <p>{{error}}</p>
-        </div>
-    </div>
-    {{/if}}
-
-    <div class="navigation">
+    <header class="header">
         <nav>
-            <img src="/images/logo.png">
+            <img src="/images/logo.avif" class="logo">
             <ul>
-                <!-- Guest users and Logged users -->
                 <li><a href="/">Home</a></li>
-                <li><a href="#">All Courses</a></li>
-                <!--For loggin users-->
-                {{#if isAuthenticated}}
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Create Course Offers</a></li>
-                <li><a href="/auth/logout">Logout</a></li>
-                {{else}}
-                <!--For guest users-->
+                <li><a href="#">Search</a></li>
+                <li><a href="#">All Volcanoes</a></li>
+                <li><a href="#">Create Volcano Wiki</a></li>
                 <li><a href="/auth/login">Login</a></li>
                 <li><a href="/auth/register">Register</a></li>
-                {{/if}}
-
+                <li><a href="/auth/logout">Logout</a></li>
             </ul>
         </nav>
-    </div>
+    </header>
 
     <main>
+        <!-- In case of error, you should display div with class "errorContainer" -->
+        <!-- You can choose to display the first error or all of them (error message/s in your opinion) -->
+        {{#if error}}
+        <div>
+            <div class="errorContainer">
+                <p>{{error}}</p>
+            </div>
+        </div>
+        {{/if}}
 
         {{{body}}}
         
     </main>
 
-    <footer>Back-End 2023</footer>
+    <footer>
+        <p>&copy JS Back-End 2024</p>
+    </footer>
+
 </body>
 
 </html>
