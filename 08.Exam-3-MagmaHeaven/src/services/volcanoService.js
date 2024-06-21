@@ -25,6 +25,18 @@ exports.vote = async (volcanoId, userId) => {
     const volcano = await Volcano.findById(volcanoId);
     const user = await User.findById(userId);
 
+    if(volcano.voteList.includes(userId) || user.votedVolcanos.includes(volcanoId)) {
+        throw new Error('You have already voted for this volcano!');
+    }
+
+    if(volcano.owner == userId) {
+        throw new Error('You cannot vote for your own volcano!');
+    }
+
+    if(!volcano) {
+        throw new Error('Volcano not found!');
+    }
+
     volcano.voteList.push(userId);
     user.votedVolcanos.push(volcanoId);
 

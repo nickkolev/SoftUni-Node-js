@@ -38,9 +38,15 @@ router.get('/:volcanoId/details', async (req, res) => {
 });
 
 router.get('/:volcanoId/vote', async (req, res) => {
-    await volcanoService.vote(req.params.volcanoId, req.user._id);
 
-    res.redirect(`/volcanos/${req.params.volcanoId}/details`);
+    try {
+        await volcanoService.vote(req.params.volcanoId, req.user._id);
+        res.redirect(`/volcanos/${req.params.volcanoId}/details`);
+    } catch (err) {
+        const message = errorUtils.getErrorMessage(err);
+        return res.render('home', { error: message });
+    }
+
 });
 
 router.get('/:volcanoId/delete', isAuth, isOwner, async (req, res) => {
