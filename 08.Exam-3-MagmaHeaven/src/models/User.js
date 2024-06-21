@@ -5,16 +5,18 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Username is required!'],
+        minlength: [2, 'Username should be at least 2 characters!'],
     },
     email: {
         type: String,
         required: [true, 'Email is required!'],
         unique: true,
+        minlength: [10, 'Email should be at least 10 characters!'],
     },
     password: {
         type: String,
         required: [true, 'Password is required!'],
-        minlength: 8,
+        minlength: [4, 'Password should be at least 4 characters!'],
     },
     createdVolcanos: [{
         type: mongoose.Types.ObjectId,

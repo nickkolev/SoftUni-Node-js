@@ -43,4 +43,18 @@ exports.edit = async (volcanoId, volcanoData) => {
     await Volcano.findByIdAndUpdate(volcanoId, volcanoData, {runValidators: true});
 };
 
+exports.search = (name, type) => {
+    let query = Volcano.find(); 
+
+    if(name) {
+        query = query.find({ name: { $regex: new RegExp(name, 'i') } });
+    }
+
+    if(type) {
+        query = query.find({ typeVolcano: { $regex: new RegExp(type) } });
+    }
+
+    return query;
+}
+
 // exports.getLatest = (count) => Course.find().sort({createdAt: -1}).limit(count);
