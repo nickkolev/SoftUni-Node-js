@@ -28,13 +28,17 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:volcanoId/details', async (req, res) => {
-    const volcano = await volcanoService.getOneDetailed(req.params.volcanoId).lean();
 
-    // const signedUpUsers = volcano.signUpList.map(user => user.username).join(', ');
-    const isOwner = volcano.owner && volcano.owner._id == req.user?._id;
-    const hasVoted = volcano.voteList.some(user => user._id == req.user?._id);
+    try {
+        const volcano = await volcanoService.getOneDetailed(req.params.volcanoId).lean();
 
-    res.render('volcanos/details', { ...volcano, isOwner, hasVoted });
+        const isOwner = volcano.owner && volcano.owner._id == req.user?._id;
+        const hasVoted = volcano.voteList.some(user => user._id == req.user?._id);
+
+        res.render('volcanos/details', { ...volcano, isOwner, hasVoted });
+    } catch (err) {
+        return res.render('home', { error: 'Volcano not found!' });
+    }
 });
 
 router.get('/:volcanoId/vote', async (req, res) => {
